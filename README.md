@@ -16,6 +16,13 @@ The `bash` shell will always do `colcon build` everytime.
 
 ## Note
 
+- This image has removed the source code of
+
+  - `csm`
+  - `ros2_laser_scan_matcher`
+  - `rplidar_ros`
+  - `slam_toolbox`
+  
 - Manually build the image
 
   ```
