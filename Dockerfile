@@ -13,7 +13,7 @@ RUN pip install --no-cache-dir torch torchvision torchaudio
 WORKDIR ${ROS2_WS}
 RUN . /opt/ros/humble/setup.sh && colcon build --event-handlers console_direct+ --cmake-args -DCMAKE_BUILD_TYPE=Release
 # You could decide wheather to delete source code
-RUN rm -r ${ROS2_WS}/src/*
+# RUN rm -r ${ROS2_WS}/src/*
 
 # Run colcon build everytime
 RUN echo "colcon build" >> /.bashrc
