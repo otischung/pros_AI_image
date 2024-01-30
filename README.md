@@ -6,6 +6,14 @@ This project aims to build an image containing `pytorch` and `ros2` for the Jets
 
 
 
+## Colcon
+
+The `bash` shell will always do `colcon build` everytime.
+
+
+
+
+
 ## Note
 
 - Manually build the image
@@ -20,7 +28,7 @@ This project aims to build an image containing `pytorch` and `ros2` for the Jets
 
 
 
-# ros
+# Dockerfile.ros2
 
 > [`CONTAINERS`](#user-content-containers) [`IMAGES`](#user-content-images) [`RUN`](#user-content-run) [`BUILD`](#user-content-build)
 
