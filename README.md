@@ -4,13 +4,15 @@ The folder `ros` refers to the [GitHub](https://github.com/dusty-nv/jetson-conta
 
 This project aims to build an image containing `pytorch` and `ros2` for the Jetson Orin Nano Developer Kit (arm64) and x86_64 platform PC (amd64).
 
+**Warning**: The function `torch.cuda.is_available()` returns False in Jetson Orin.
+
 
 
 ## Colcon
 
-The `bash` shell will always do `colcon build` everytime.
+The `bash` shell will always do `colcon build` every time.
 
-
+You can mount your `src` folder to `/workspaces/src` in the container.
 
 
 
