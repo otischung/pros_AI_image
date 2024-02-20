@@ -12,6 +12,7 @@ RUN rm /.bashrc && rm /root/.bashrc && rm /ros_entrypoint.sh
 COPY ./requirements.txt /tmp
 
 # Copy the run command for rebuilding colcon. You can source it.
+RUN mkdir ${ROS2_WS}
 COPY ./rebuild_colcon.rc ${ROS2_WS}
 
 # Use our pre-defined bashrc
@@ -37,13 +38,12 @@ RUN . /opt/ros/humble/setup.sh && \
 
 ##### 3. Astra Camera Installation
 # install dependencies
-
 RUN apt update && apt install -y libgflags-dev ros-${ROS_DISTRO}-image-geometry ros-${ROS_DISTRO}-camera-info-manager \
     ros-${ROS_DISTRO}-image-transport ros-${ROS_DISTRO}-image-publisher
 RUN apt update && apt install -y libgoogle-glog-dev libusb-1.0-0-dev libeigen3-dev \
     libopenni2-dev nlohmann-json3-dev
 RUN apt install ros-${ROS_DISTRO}-image-transport-plugins -y
-RUN git clone  https://github.com/libuvc/libuvc.git /temp/libuvc
+RUN git clone https://github.com/libuvc/libuvc.git /temp/libuvc
 WORKDIR /temp/libuvc
 RUN mkdir build
 WORKDIR /temp/libuvc/build
@@ -72,10 +72,10 @@ RUN apt update && \
 
 RUN pip install --no-cache-dir torch torchvision torchaudio
 
-##### 5. Build your ROS packages
-# We use mount instead of copy
-# COPY ./src ${ROS2_WS}/src
-RUN . /opt/ros/humble/setup.sh && colcon build --event-handlers console_direct+ --cmake-args -DCMAKE_BUILD_TYPE=Release
+# ##### 5. Build your ROS packages
+# # We use mount instead of copy
+# # COPY ./src ${ROS2_WS}/src
+# RUN . /opt/ros/humble/setup.sh && colcon build --event-handlers console_direct+ --cmake-args -DCMAKE_BUILD_TYPE=Release
 
 ##### 6. Post-Settings
 COPY ./ros_entrypoint.bash /ros_entrypoint.bash
