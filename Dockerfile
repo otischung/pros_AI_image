@@ -6,7 +6,7 @@ ENV THREADS 2
 
 ##### 1. Environment Settings #####
 # Remove the run command in ros2-humble image
-RUN rm /.bashrc && rm /root/.bashrc && rm /ros_entrypoint.sh
+RUN rm /.bashrc && rm /root/.bashrc && rm /ros_entrypoint.sh && rm /etc/hostname
 
 # Copy the python package requirements.txt.
 COPY ./requirements.txt /tmp
@@ -17,6 +17,9 @@ COPY ./rebuild_colcon.rc ${ROS2_WS}
 
 # Use our pre-defined bashrc
 COPY ./.bashrc /root
+
+# Use our pre-defined hostname
+COPY ./hostname /etc
 
 WORKDIR ${ROS2_WS}
 
