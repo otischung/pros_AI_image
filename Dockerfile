@@ -62,10 +62,9 @@ RUN ldconfig
 WORKDIR ${ROS2_WS}
 COPY ./camera_src ./src
 RUN apt update && rosdep install -q -y -r --from-paths src --ignore-src
-RUN . /opt/ros/humble/setup.sh && \
-    colcon build --packages-select pros_image --symlink-install --parallel-workers ${THREADS} && \
-    colcon build --packages-select astra_camera_msgs --symlink-install --parallel-workers ${THREADS} && \
-    colcon build --packages-select astra_camera --symlink-install --parallel-workers ${THREADS}
+RUN . /opt/ros/humble/setup.sh && colcon build --packages-select pros_image --symlink-install --parallel-workers ${THREADS}
+RUN . /opt/ros/humble/setup.sh && colcon build --packages-select astra_camera_msgs --symlink-install --parallel-workers ${THREADS}
+RUN . /opt/ros/humble/setup.sh && colcon build --packages-select astra_camera --symlink-install --parallel-workers ${THREADS}
 
 ##### 4. PyTorch Installation
 # Install dependencies
