@@ -1,0 +1,6 @@
+[submodule "rplidar_src/rplidar_ros"]
+	path = rplidar_src/rplidar_ros
+	url = https://github.com/Slamtec/rplidar_ros
+[submodule "rplidar_src/slam_toolbox"]
+	path = rplidar_src/slam_toolbox
+	url = https://github.com/SteveMacenski/slam_toolbox
