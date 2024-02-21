@@ -51,7 +51,7 @@ WORKDIR /temp/libuvc
 RUN mkdir build
 WORKDIR /temp/libuvc/build
 RUN cmake ..
-RUN make -j2
+RUN make -j${THREADS}
 RUN make install
 RUN ldconfig
 
