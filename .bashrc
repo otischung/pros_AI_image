@@ -147,6 +147,4 @@ source "$OSH"/oh-my-bash.sh
 source /opt/ros/humble/setup.bash
 source /etc/profile.d/bash_completion.sh
 export PATH="/usr/lib/ccache:$PATH"
-source /opt/ros/humble/setup.bash
-source /etc/profile.d/bash_completion.sh
 source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash

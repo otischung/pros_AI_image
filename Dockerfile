@@ -6,7 +6,7 @@ ENV THREADS 2
 
 ##### 1. Environment Settings #####
 # Remove the run command in ros2-humble image
-RUN rm /.bashrc && rm /root/.bashrc && rm /ros_entrypoint.sh && rm /etc/hostname
+RUN rm /.bashrc && rm /root/.bashrc && rm /ros_entrypoint.sh
 
 # Copy the python package requirements.txt.
 COPY ./requirements.txt /tmp
@@ -17,9 +17,6 @@ COPY ./rebuild_colcon.rc ${ROS2_WS}
 
 # Use our pre-defined bashrc
 COPY ./.bashrc /root
-
-# Use our pre-defined hostname
-COPY ./hostname /etc
 
 WORKDIR ${ROS2_WS}
 
@@ -66,13 +63,22 @@ RUN . /opt/ros/humble/setup.sh && colcon build --packages-select pros_image --sy
 RUN . /opt/ros/humble/setup.sh && colcon build --packages-select astra_camera_msgs --symlink-install --parallel-workers ${THREADS}
 RUN . /opt/ros/humble/setup.sh && colcon build --packages-select astra_camera --symlink-install --parallel-workers ${THREADS}
 
-##### 4. PyTorch Installation
+##### 4. PyTorch and Others Installation
 # Install dependencies
 RUN pip3 install --no-cache-dir -r /tmp/requirements.txt
 RUN apt update && \
-    apt install -y libncurses5-dev libncursesw5-dev tmux screen ncdu tree
+    apt install -y libncurses5-dev libncursesw5-dev tmux screen ncdu tree zsh
 
 RUN pip install --no-cache-dir torch torchvision torchaudio
+
+# Setup zsh
+RUN rm /etc/zsh/zshrc
+COPY ./zshrc /etc/zsh/zshrc
+COPY ./.oh-my-zsh /root
+COPY ./zim /root
+COPY ./.p10k.zsh /root
+COPY ./.zimrc /root
+COPY ./zshrc /root
 
 # ##### 5. Build your ROS packages
 # # We use mount instead of copy

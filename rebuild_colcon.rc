@@ -1,5 +1,5 @@
 CURDIR=$(pwd)
 cd /workspaces
-colcon build
+colcon build --symlink-install
 source /workspaces/install/setup.bash
 cd $CURDIR
