@@ -4,3 +4,9 @@
 [submodule "rplidar_src/slam_toolbox"]
 	path = rplidar_src/slam_toolbox
 	url = https://github.com/SteveMacenski/slam_toolbox
+[submodule "powerlevel10k"]
+	path = powerlevel10k
+	url = https://github.com/romkatv/powerlevel10k
+[submodule "oh-my-zsh/powerlevel10k"]
+	path = .oh-my-zsh/custom/themes/powerlevel10k
+	url = https://github.com/romkatv/powerlevel10k
