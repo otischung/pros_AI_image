@@ -20,6 +20,12 @@ source /workspaces/rebuild_colcon.rc
 
 
 
+### <font color=#FF0000>Shortcut</font> for Colcon
+
+We have written the command `source /workspaces/rebuild_colcon.rc` as an alias <font color=#FF0000>'r'</font> in both `/root/.bashrc` and `/root/.zshrc`. Users only need to <font color=#FF0000>type 'r' to execute the command</font>.
+
+
+
 ## Source code
 
 - This image has removed the source code of
@@ -416,5 +422,4 @@ Reference: https://askubuntu.com/questions/1339558/cant-build-dockerfile-for-arm
 
 
 - We need the content in `/.bashrc`, but the initial run command is `/root/.bashrc`. Therefore, we move `/.bashrc` into `/root/`.
-
 
