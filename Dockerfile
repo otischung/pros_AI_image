@@ -2,17 +2,17 @@ FROM public.ecr.aws/paia-tech/ros2-humble:dev
 ENV ROS2_WS /workspaces
 ENV ROS_DOMAIN_ID=1
 ENV ROS_DISTRO humble
-# ENV THREADS 2
+ENV THREADS 2
 
 ##### 1. Environment Settings #####
-# Copy the script into the image to calculate threads of the host build machine
-COPY set_threads.sh /usr/local/bin/
-
-# Make the script executable
-RUN chmod +x /usr/local/bin/set_threads.sh
-
-# Run the script to determine and set the THREADS environment variable
-ENV THREADS $(/usr/local/bin/set_threads.sh)
+## Copy the script into the image to calculate threads of the host build machine
+#COPY set_threads.sh /usr/local/bin/
+#
+## Make the script executable
+#RUN chmod +x /usr/local/bin/set_threads.sh
+#
+## Run the script to determine and set the THREADS environment variable
+#ENV THREADS $(/usr/local/bin/set_threads.sh)
 
 # Remove the run command in ros2-humble image
 RUN rm /.bashrc && rm /root/.bashrc && rm /ros_entrypoint.sh
