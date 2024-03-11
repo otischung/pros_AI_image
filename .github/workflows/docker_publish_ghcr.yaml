@@ -68,16 +68,16 @@ jobs:
           sudo apt-get autoclean -y >/dev/null 2>&1
           echo "some packages purged"
 
-      - name: Check disk space after removing unnecessary packages
-        run: |
-          sudo dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -nr | head
-          df . -h
-          sudo du /usr/ -hx -d 4 --threshold=1G | sort -hr | head
+      # - name: Check disk space after removing unnecessary packages
+      #   run: |
+      #     sudo dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -nr | head
+      #     df . -h
+      #     sudo du /usr/ -hx -d 4 --threshold=1G | sort -hr | head
 
       # This is going to pull our code from the repository
       # into the actions runner in order to build the image
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # # Install the cosign tool except on PR
       # # https://github.com/sigstore/cosign-installer
