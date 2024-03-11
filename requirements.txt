@@ -1,5 +1,11 @@
 # TODO add the python package you need 
+librosa
 mediapipe
+numpy
+opencv-python
+orjson
 pydantic==1.10
 pyserial
-orjson
+scikit-learn
+scipy
+tqdm
