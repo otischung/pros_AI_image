@@ -148,3 +148,8 @@ alias sl=ls
 
 source /opt/ros/humble/setup.zsh
 source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.zsh
+
+alias sl=ls
+alias l="ls -lash"
+alias r="source /workspaces/rebuild_colcon.rc"
+alias m="make"

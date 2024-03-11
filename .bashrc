@@ -148,3 +148,8 @@ source /opt/ros/humble/setup.bash
 source /etc/profile.d/bash_completion.sh
 export PATH="/usr/lib/ccache:$PATH"
 source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash
+
+alias sl=ls
+alias l="ls -lash"
+alias r="source /workspaces/rebuild_colcon.rc"
+alias m="make"
