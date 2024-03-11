@@ -73,12 +73,13 @@ RUN pip install --no-cache-dir torch torchvision torchaudio
 
 # Setup zsh
 RUN rm /etc/zsh/zshrc
-COPY ./zshrc /etc/zsh/zshrc
-COPY ./.oh-my-zsh /root
-COPY ./.zim /root
-COPY ./.p10k.zsh /root
-COPY ./.zimrc /root
-COPY ./.zshrc /root
+COPY ./zsh_setup/zshrc /etc/zsh/zshrc
+COPY ./zsh_setup/.oh-my-zsh /root
+COPY ./zsh_setup/.zim /root
+COPY ./zsh_setup/powerlevel10k /root
+COPY ./zsh_setup/.p10k.zsh /root
+COPY ./zsh_setup/.zimrc /root
+COPY ./zsh_setup/.zshrc /root
 
 # ##### 5. Build your ROS packages
 # # We use mount instead of copy
