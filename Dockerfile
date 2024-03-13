@@ -35,20 +35,20 @@ RUN apt update && \
 WORKDIR ${ROS2_WS}
 
 ##### 2. Rplidar Installation
-# # TODO install dependencies
-# # RUN apt install -y packages_to_install
-# RUN rosdep update
+# TODO install dependencies
+# RUN apt install -y packages_to_install
+RUN rosdep update
 
-# # Build your ROS packages
-# COPY ./rplidar_src ./src
-# RUN rosdep install -q -y -r --from-paths src --ignore-src
-# RUN apt install ros-${ROS_DISTRO}-navigation2 ros-${ROS_DISTRO}-nav2-bringup -y
-# RUN . /opt/ros/humble/setup.sh && \
-#     colcon build --packages-select rplidar_ros --symlink-install --parallel-workers ${THREADS} && \
-#     colcon build --packages-select csm --symlink-install --parallel-workers ${THREADS} && \
-#     colcon build --packages-select ros2_laser_scan_matcher --symlink-install --parallel-workers ${THREADS}
-# RUN . /opt/ros/humble/setup.sh && \
-#     colcon build --packages-select slam_toolbox --symlink-install --parallel-workers ${THREADS}
+# Build your ROS packages
+COPY ./rplidar_src ./src
+RUN rosdep install -q -y -r --from-paths src --ignore-src
+RUN apt install ros-${ROS_DISTRO}-navigation2 ros-${ROS_DISTRO}-nav2-bringup -y
+RUN . /opt/ros/humble/setup.sh && \
+    colcon build --packages-select rplidar_ros --symlink-install --parallel-workers ${THREADS} && \
+    colcon build --packages-select csm --symlink-install --parallel-workers ${THREADS} && \
+    colcon build --packages-select ros2_laser_scan_matcher --symlink-install --parallel-workers ${THREADS}
+RUN . /opt/ros/humble/setup.sh && \
+    colcon build --packages-select slam_toolbox --symlink-install --parallel-workers ${THREADS}
 
 RUN apt install ros-humble-rplidar-ros
 
