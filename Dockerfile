@@ -102,7 +102,6 @@ COPY ./zsh_setup/.zshrc /root
 # RUN . /opt/ros/humble/setup.sh && colcon build --event-handlers console_direct+ --cmake-args -DCMAKE_BUILD_TYPE=Release
 
 ##### 6. Post-Settings
-RUN apt autoremove -y && apt autoclean
 COPY ./ros_entrypoint.bash /ros_entrypoint.bash
 RUN chmod +x /ros_entrypoint.bash
 ENTRYPOINT [ "/ros_entrypoint.bash" ]
