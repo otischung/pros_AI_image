@@ -27,29 +27,36 @@ COPY ./rebuild_colcon.rc ${ROS2_WS}
 # Use our pre-defined bashrc
 COPY ./.bashrc /root
 
+# System Upgrade
+RUN apt update && \
+    apt upgrade -y && \
+    pip3 install --no-cache-dir --upgrade pip
+
 WORKDIR ${ROS2_WS}
 
 ##### 2. Rplidar Installation
-# TODO install dependencies
-# RUN apt install -y packages_to_install
-RUN rosdep update
+# # TODO install dependencies
+# # RUN apt install -y packages_to_install
+# RUN rosdep update
 
-# Build your ROS packages
-COPY ./rplidar_src ./src
-RUN apt update && rosdep install -q -y -r --from-paths src --ignore-src
-RUN apt install ros-${ROS_DISTRO}-navigation2 ros-${ROS_DISTRO}-nav2-bringup -y
-RUN . /opt/ros/humble/setup.sh && \
-    colcon build --packages-select rplidar_ros --symlink-install --parallel-workers ${THREADS} && \
-    colcon build --packages-select csm --symlink-install --parallel-workers ${THREADS} && \
-    colcon build --packages-select ros2_laser_scan_matcher --symlink-install --parallel-workers ${THREADS}
-RUN . /opt/ros/humble/setup.sh && \
-    colcon build --packages-select slam_toolbox --symlink-install --parallel-workers ${THREADS}
+# # Build your ROS packages
+# COPY ./rplidar_src ./src
+# RUN rosdep install -q -y -r --from-paths src --ignore-src
+# RUN apt install ros-${ROS_DISTRO}-navigation2 ros-${ROS_DISTRO}-nav2-bringup -y
+# RUN . /opt/ros/humble/setup.sh && \
+#     colcon build --packages-select rplidar_ros --symlink-install --parallel-workers ${THREADS} && \
+#     colcon build --packages-select csm --symlink-install --parallel-workers ${THREADS} && \
+#     colcon build --packages-select ros2_laser_scan_matcher --symlink-install --parallel-workers ${THREADS}
+# RUN . /opt/ros/humble/setup.sh && \
+#     colcon build --packages-select slam_toolbox --symlink-install --parallel-workers ${THREADS}
+
+RUN apt install ros-humble-rplidar-ros
 
 ##### 3. Astra Camera Installation
 # install dependencies
-RUN apt update && apt install -y libgflags-dev ros-${ROS_DISTRO}-image-geometry ros-${ROS_DISTRO}-camera-info-manager \
+RUN apt install -y libgflags-dev ros-${ROS_DISTRO}-image-geometry ros-${ROS_DISTRO}-camera-info-manager \
     ros-${ROS_DISTRO}-image-transport ros-${ROS_DISTRO}-image-publisher
-RUN apt update && apt install -y libgoogle-glog-dev libusb-1.0-0-dev libeigen3-dev \
+RUN apt install -y libgoogle-glog-dev libusb-1.0-0-dev libeigen3-dev \
     libopenni2-dev nlohmann-json3-dev
 RUN apt install ros-${ROS_DISTRO}-image-transport-plugins -y
 RUN git clone https://github.com/libuvc/libuvc.git /temp/libuvc
@@ -67,7 +74,7 @@ RUN ldconfig
 # Build
 WORKDIR ${ROS2_WS}
 COPY ./camera_src ./src
-RUN apt update && rosdep install -q -y -r --from-paths src --ignore-src
+RUN rosdep install -q -y -r --from-paths src --ignore-src
 RUN . /opt/ros/humble/setup.sh && colcon build --packages-select pros_image --symlink-install --parallel-workers ${THREADS}
 RUN . /opt/ros/humble/setup.sh && colcon build --packages-select astra_camera_msgs --symlink-install --parallel-workers ${THREADS}
 RUN . /opt/ros/humble/setup.sh && colcon build --packages-select astra_camera --symlink-install --parallel-workers ${THREADS}
@@ -75,10 +82,9 @@ RUN . /opt/ros/humble/setup.sh && colcon build --packages-select astra_camera --
 ##### 4. PyTorch and Others Installation
 # Install dependencies
 RUN pip3 install --no-cache-dir -r /tmp/requirements.txt
-RUN apt update && \
-    apt install -y libncurses5-dev libncursesw5-dev tmux screen ncdu tree zsh
+RUN apt install -y libncurses5-dev libncursesw5-dev tmux screen ncdu tree zsh
 
-RUN pip install --no-cache-dir torch torchvision torchaudio
+RUN pip3 install --no-cache-dir torch torchvision torchaudio
 
 # Setup zsh
 RUN rm /etc/zsh/zshrc
