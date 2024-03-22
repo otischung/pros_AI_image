@@ -1,8 +1,9 @@
 export IMG_NAME="pros_ai_image"
 export ECR_URL="ghcr.io/otischung"
 export TODAY=$(date +%Y%m%d)
-
 export DOCKER_CLI_EXPERIMENTAL=enabled
+
+docker login --username otischung --password-stdin ghcr.io/otischung
 docker run --rm --privileged tonistiigi/binfmt:latest
 docker run --privileged --rm tonistiigi/binfmt --uninstall qemu-*
 docker run --privileged --rm tonistiigi/binfmt --install all
