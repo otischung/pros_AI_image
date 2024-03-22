@@ -79,7 +79,42 @@ RUN . /opt/ros/humble/setup.sh && colcon build --packages-select pros_image --sy
 RUN . /opt/ros/humble/setup.sh && colcon build --packages-select astra_camera_msgs --symlink-install --parallel-workers ${THREADS}
 RUN . /opt/ros/humble/setup.sh && colcon build --packages-select astra_camera --symlink-install --parallel-workers ${THREADS}
 
-##### 4. PyTorch and Others Installation
+##### 4. Nvidia cuda installation
+# cuda toolkit 12.4
+RUN if [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
+    wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/arm64/cuda-ubuntu2204.pin && \
+    mv cuda-ubuntu2204.pin /etc/apt/preferences.d/cuda-repository-pin-600 && \
+    wget https://developer.download.nvidia.com/compute/cuda/12.4.0/local_installers/cuda-tegra-repo-ubuntu2204-12-4-local_12.4.0-1_arm64.deb && \
+    dpkg -i cuda-tegra-repo-ubuntu2204-12-4-local_12.4.0-1_arm64.deb && \
+    cp /var/cuda-tegra-repo-ubuntu2204-12-4-local/cuda-*-keyring.gpg /usr/share/keyrings/ && \
+    apt update && \
+    apt -y install cuda-toolkit-12-4 cuda-compat-12-4 \
+elif [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
+    wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-ubuntu2204.pin && \
+    mv cuda-ubuntu2204.pin /etc/apt/preferences.d/cuda-repository-pin-600 && \
+    wget https://developer.download.nvidia.com/compute/cuda/12.4.0/local_installers/cuda-repo-ubuntu2204-12-4-local_12.4.0-550.54.14-1_amd64.deb && \
+    dpkg -i cuda-repo-ubuntu2204-12-4-local_12.4.0-550.54.14-1_amd64.deb && \
+    cp /var/cuda-repo-ubuntu2204-12-4-local/cuda-*-keyring.gpg /usr/share/keyrings/ && \
+    apt update && \
+    apt -y install cuda-toolkit-12-4 \
+fi
+
+# cudnn 9.0.0
+RUN if [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
+    wget https://developer.download.nvidia.com/compute/cudnn/9.0.0/local_installers/cudnn-local-tegra-repo-ubuntu2204-9.0.0_1.0-1_arm64.deb && \
+    dpkg -i cudnn-local-tegra-repo-ubuntu2204-9.0.0_1.0-1_arm64.deb && \
+    cp /var/cudnn-local-tegra-repo-ubuntu2204-9.0.0/cudnn-*-keyring.gpg /usr/share/keyrings/ && \
+    apt update && \
+    apt -y install cudnn-cuda-12 \
+elif [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
+    wget https://developer.download.nvidia.com/compute/cudnn/9.0.0/local_installers/cudnn-local-repo-ubuntu2204-9.0.0_1.0-1_amd64.deb && \
+    dpkg -i cudnn-local-repo-ubuntu2204-9.0.0_1.0-1_amd64.deb && \
+    cp /var/cudnn-local-repo-ubuntu2204-9.0.0/cudnn-*-keyring.gpg /usr/share/keyrings/ && \
+    apt update && \
+    apt -y install cudnn-cuda-12 && \
+fi
+
+##### 5. PyTorch and Others Installation
 # Install dependencies
 RUN pip3 install --no-cache-dir -r /tmp/requirements.txt
 RUN apt install -y libncurses5-dev libncursesw5-dev tmux screen ncdu tree zsh
@@ -96,12 +131,12 @@ COPY ./zsh_setup/.p10k.zsh /root
 COPY ./zsh_setup/.zimrc /root
 COPY ./zsh_setup/.zshrc /root
 
-# ##### 5. Build your ROS packages
+# ##### 6. Build your ROS packages
 # # We use mount instead of copy
 # # COPY ./src ${ROS2_WS}/src
 # RUN . /opt/ros/humble/setup.sh && colcon build --event-handlers console_direct+ --cmake-args -DCMAKE_BUILD_TYPE=Release
 
-##### 6. Post-Settings
+##### 7. Post-Settings
 COPY ./ros_entrypoint.bash /ros_entrypoint.bash
 RUN chmod +x /ros_entrypoint.bash
 ENTRYPOINT [ "/ros_entrypoint.bash" ]
