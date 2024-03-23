@@ -4,7 +4,7 @@ ENV ROS_DOMAIN_ID=1
 ENV ROS_DISTRO humble
 ENV THREADS 2
 
-##### 1. Environment Settings #####
+##### Environment Settings #####
 ## Copy the script into the image to calculate threads of the host build machine
 #COPY set_threads.sh /usr/local/bin/
 #
@@ -34,7 +34,7 @@ RUN apt update && \
 
 WORKDIR ${ROS2_WS}
 
-##### 2. Rplidar Installation
+##### Rplidar Installation #####
 # TODO install dependencies
 # RUN apt install -y packages_to_install
 RUN rosdep update
@@ -52,7 +52,7 @@ RUN . /opt/ros/humble/setup.sh && \
 
 RUN apt install ros-humble-rplidar-ros
 
-##### 3. Astra Camera Installation
+##### Astra Camera Installation #####
 # install dependencies
 RUN apt install -y libgflags-dev ros-${ROS_DISTRO}-image-geometry ros-${ROS_DISTRO}-camera-info-manager \
     ros-${ROS_DISTRO}-image-transport ros-${ROS_DISTRO}-image-publisher
@@ -79,7 +79,7 @@ RUN . /opt/ros/humble/setup.sh && colcon build --packages-select pros_image --sy
 RUN . /opt/ros/humble/setup.sh && colcon build --packages-select astra_camera_msgs --symlink-install --parallel-workers ${THREADS}
 RUN . /opt/ros/humble/setup.sh && colcon build --packages-select astra_camera --symlink-install --parallel-workers ${THREADS}
 
-##### 4. Nvidia cuda installation
+##### Nvidia cuda installation #####
 # cuda toolkit 12.4
 RUN if [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
     wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/arm64/cuda-ubuntu2204.pin && \
@@ -88,7 +88,7 @@ RUN if [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
     dpkg -i cuda-tegra-repo-ubuntu2204-12-4-local_12.4.0-1_arm64.deb && \
     cp /var/cuda-tegra-repo-ubuntu2204-12-4-local/cuda-*-keyring.gpg /usr/share/keyrings/ && \
     apt update && \
-    apt -y install cuda-toolkit-12-4 cuda-compat-12-4 \
+    apt -y install cuda-toolkit-12-4 cuda-compat-12-4; \
 elif [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
     wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-ubuntu2204.pin && \
     mv cuda-ubuntu2204.pin /etc/apt/preferences.d/cuda-repository-pin-600 && \
@@ -96,7 +96,7 @@ elif [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
     dpkg -i cuda-repo-ubuntu2204-12-4-local_12.4.0-550.54.14-1_amd64.deb && \
     cp /var/cuda-repo-ubuntu2204-12-4-local/cuda-*-keyring.gpg /usr/share/keyrings/ && \
     apt update && \
-    apt -y install cuda-toolkit-12-4 \
+    apt -y install cuda-toolkit-12-4; \
 fi
 
 # cudnn 9.0.0
@@ -114,7 +114,7 @@ elif [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
     apt -y install cudnn-cuda-12 && \
 fi
 
-##### 5. PyTorch and Others Installation
+##### PyTorch and Others Installation #####
 # Install dependencies
 RUN pip3 install --no-cache-dir -r /tmp/requirements.txt
 RUN apt install -y libncurses5-dev libncursesw5-dev tmux screen ncdu tree zsh
@@ -131,12 +131,12 @@ COPY ./zsh_setup/.p10k.zsh /root
 COPY ./zsh_setup/.zimrc /root
 COPY ./zsh_setup/.zshrc /root
 
-# ##### 6. Build your ROS packages
+# ##### Build your ROS packages #####
 # # We use mount instead of copy
 # # COPY ./src ${ROS2_WS}/src
 # RUN . /opt/ros/humble/setup.sh && colcon build --event-handlers console_direct+ --cmake-args -DCMAKE_BUILD_TYPE=Release
 
-##### 7. Post-Settings
+##### Post-Settings #####
 COPY ./ros_entrypoint.bash /ros_entrypoint.bash
 RUN chmod +x /ros_entrypoint.bash
 ENTRYPOINT [ "/ros_entrypoint.bash" ]
